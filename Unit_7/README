@@ -1,0 +1,49 @@
+** OVERVIEW **
+- This is a simple multi-client chat application built in Java using socket programming. The server manages connections from multiple clients, assigns unique IDs, and broadcasts messages. Each client connects to the server, provides a name, and can send/receive messages in real-time. Features include user names in broadcasts, colored incoming messages (cyan via ANSI codes), prompt clearing for smooth UI, and a "/q" command to quit gracefully.
+
+** REQUIREMENTS **
+- Java JDK 8 or higher.
+- A Java-compatible IDE like Visual Studio Code (VSCode) with the Java extension pack installed (optional for debugging)
+- No external libraries required; uses standard Java packages (java.net, java.io, java.util).
+
+** COMPILATION **
+- 1. Open the project folder in VSCode.
+- 2. Compile the source files:
+-     javac ChatServer.java
+-     javac ChatClient.java
+
+** HOW TO RUN **
+- To simulate a multi-client setup as described (server on left 50% of screen, client 1 on top-right 25%, client 2 on bottom-right 25%):
+- 1. Open three separate VSCode windows:
+-     Window 1 (Server): Position on the left half of the screen (50% width). Navigate to the project folder and run the server:
+-       java ChatServer
+-       The server will start listening on localhost port 12345 and log connections, messages, and disconnections.
+- 2. Window 2 (Client 1): Position on the top-right quarter of the screen (25% width). Navigate to the project folder and run a client:
+-     java ChatClient
+-     Follow prompts: Enter name, then send messages.
+- 3. Window 3 (Client 2): Position on the bottom-right quarter of the screen (25% width). Navigate to the project folder and run another client:
+-     java ChatClient
+-     Follow prompts: Enter name, then send messages.
+ - Messages sent from one client are broadcasted to others with the format: "New message from <name>(ID X): <message>".
+ - To quit a client, type "/q" at the message prompt.
+ - The server detects disconnections (e.g., via Ctrl+C or "/q") and updates the client list.
+ - Note: ANSI color codes and prompt clearing work best in terminals that support them (e.g., VSCode integrated terminal). If issues arise, run in Command Prompt or adjust terminal settings.
+
+** IMPLEMENTATION DETAILS **
+- ### Server (ChatServer.java)
+ - Uses ServerSocket to listen for connections on port 12345.
+ - Each client is handled in a separate thread via an inner ClientHandler class for concurrency.
+ - Maintains a thread-safe list of clients using CopyOnWriteArrayList.
+ - Assigns sequential unique IDs to clients.
+ - Reads the client's name as the first input after connection.
+ - Broadcasts messages to all other clients, prefixing with the sender's name and ID.
+ - Logs connections/disconnections with name, ID, and total clients.
+ - Handles errors and cleanups in try-catch-finally blocks for robustness.
+- ### Client (ChatClient.java)
+ - Connects to the server using Socket on localhost:12345.
+ - Prompts for user name and sends it to the server.
+ - Displays a "Hello <name> !" greeting.
+ - Uses a daemon thread for receiving messages: Clears the current prompt, prints incoming messages in cyan, and reprints the prompt.
+ - Main thread handles user input via Scanner, sending messages to the server.
+ - Supports "/q" to quit: Shuts down socket I/O to unblock the receiver thread and exit cleanly.
+ - Resource cleanup in a finally block to close streams and socket.
