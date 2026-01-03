@@ -1,0 +1,22 @@
+Weather Information App
+Overview
+This is a Java-based desktop application that provides real-time weather information using the WeatherAPI.com service. The app features a user-friendly GUI built with JavaFX, allowing users to search for weather by city name, view current conditions, a 3-day forecast, and switch units for temperature and wind speed. It also includes search history tracking and dynamic backgrounds based on the local time of the queried location.
+Requirements
+•	Java 8 or higher (with JavaFX included; for Java 11+, ensure JavaFX is added as a module).
+•	An API key from WeatherAPI.com. Replace the placeholder in the code (API_KEY) with your actual key.
+•	Internet connection for API requests.
+How to Run
+1.	Compile the Java file: javac App.java (ensure JavaFX is in your classpath/module-path).
+2.	Run the application: java App.
+3.	On startup, it auto-searches for "Chicago". Enter a city name in the input field and click "Search" or press Enter.
+4.	Use the toggle buttons to switch units (Celsius/Fahrenheit, km/h/mph).
+5.	Click on history items to re-search cities.
+6.	Logs are saved to weather_app.log in the C:\Users\<user name> for debugging.
+Implementation Details
+•	API Integration: Uses WeatherAPI.com's /forecast.json endpoint to fetch current weather forecast. Parses JSON manually (without external libraries) for temperature, humidity, wind speed, conditions, feels-like temp, and forecast data (max/min temp, condition per day).
+•	GUI Design: JavaFX with BorderPane layout. Center: Input and weather display. Right: Search history ListView. Weather info in a styled VBox with emojis for conditions.
+•	Forecast Display: Shows current forecast with date, max/min temp (in C/F), and condition.
+•	Unit Conversion: Toggles between C/F and km/h/mph using stored API values (no manual calculations).
+•	Error Handling: Handles invalid input, API errors (400, 401, 403), connection issues with alert dialogs.
+•	History Tracking: Stores up to 10 recent searches with timestamps in a ListView.
+•	Logging: All actions and errors logged to file for traceability.
